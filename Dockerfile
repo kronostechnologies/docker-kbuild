@@ -6,7 +6,8 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
- apt-transport-https ca-certificates
+ apt-transport-https ca-certificates \
+&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1655A0AB68576280
 
@@ -22,9 +23,9 @@ build-essential dh-autoreconf nasm git ssh \
 sudo \
 && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-RUN gem install sass \
+RUN gem install -N sass \
 && npm install -g grunt-cli bower \
-&& curl -sL https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+&& curl -sL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
