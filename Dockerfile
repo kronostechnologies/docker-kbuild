@@ -1,27 +1,12 @@
-FROM debian:jessie-slim
+FROM alpine:latest
 LABEL maintainer "sysadmin@kronostechnologies.com"
 
-ENV DEBIAN_FRONTEND=noninteractive
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
- apt-transport-https ca-certificates \
-&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+RUN apk update && apk upgrade && apk add --no-cache build-base libpng-dev libtool nasm curl php5-cli php5-json php5-phar php5-openssl php5-zlib nodejs ruby git nodejs-npm sudo bash autoconf automake && rm -rf /var/cache/apk/* && find /usr/lib/node_modules -type d -name "test" -exec rm -rf {} \;
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1655A0AB68576280
-
-RUN echo '\
- deb https://deb.debian.org/debian jessie main\n\
- deb https://deb.debian.org/debian-security jessie/updates main\n\
- deb https://deb.nodesource.com/node_6.x jessie main\
-' > /etc/apt/sources.list
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-libpng-dev nodejs php5-cli ruby curl \
-build-essential dh-autoreconf nasm git ssh \
-sudo \
-&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+RUN ln -s /usr/bin/php5 /usr/bin/php
 
 RUN gem install -N sass \
 && npm install -g grunt-cli bower \

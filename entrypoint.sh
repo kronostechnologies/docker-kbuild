@@ -1,7 +1,7 @@
 #!/bin/bash
 
-groupadd -g ${GROUPID:-1000} docker
-useradd -d /code/.kbuild -u ${USERID:-1000} -g ${GROUPID:-1000} docker
+addgroup -g ${GROUPID:-1000} docker
+adduser -h /code/.kbuild -u ${USERID:-1000} -G docker -D docker
 
 if [[ ! -z "$COMPOSER_API_KEY" ]]; then
   sudo -u docker composer config -g github-oauth.github.com $COMPOSER_API_KEY
