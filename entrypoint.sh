@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[[ -n $(getent group "${GROUPID}") ]] && getent group ${GROUPID} | awk -F: '{ print $1 }' |xargs delgroup
+
 addgroup -g ${GROUPID:-1000} docker
 adduser -h /code/.kbuild -u ${USERID:-1000} -G docker -D docker
 
