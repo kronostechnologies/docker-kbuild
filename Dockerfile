@@ -25,6 +25,7 @@ RUN apt-get update \
  openssh-client \
  unzip \
  pkg-config \
+ python \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 RUN echo "Defaults env_keep=SSH_AUTH_SOCK" >> /etc/sudoers
