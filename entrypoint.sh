@@ -2,8 +2,8 @@
 
 [[ -n $(getent group "${GROUPID}") ]] && getent group ${GROUPID} | awk -F: '{ print $1 }' |xargs delgroup
 
-addgroup -g ${GROUPID:-1000} docker
-adduser -h /code/.kbuild -u ${USERID:-1000} -G docker -D docker
+groupadd -o -g ${GROUPID:-1000} docker
+useradd -o -d /code/.kbuild -u ${USERID:-1000} -g docker -M docker
 
 if [[ ! -z "$COMPOSER_API_KEY" ]]; then
   sudo -u docker composer config -g github-oauth.github.com $COMPOSER_API_KEY

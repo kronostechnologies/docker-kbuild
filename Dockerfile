@@ -1,12 +1,33 @@
-FROM alpine:latest
-LABEL maintainer "sysadmin@kronostechnologies.com"
+FROM debian:stretch-slim
+MAINTAINER "sysadmin@kronostechnologies.com"
 
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-RUN apk update && apk upgrade && apk add --no-cache build-base libpng-dev libtool nasm curl php5-cli php5-json php5-phar php5-openssl php5-zlib nodejs git nodejs-npm sudo bash openssh-client autoconf automake && rm -rf /var/cache/apk/* && find /usr/lib/node_modules -type d -name "test" -exec rm -rf {} \;
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get upgrade -y && apt-get install apt-transport-https curl gnupg2 -y \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+ADD etc/ /etc/
+RUN curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+ && curl -s https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg | apt-key add -
+RUN apt-get update \
+ && apt-get install -y \
+ build-essential \
+ debhelper \
+ git \
+ php5.6-cli \
+ php5.6-xml \
+ php5.6-zip \
+ nasm \
+ libpng-dev \
+ nodejs \
+ sudo \
+ openssh-client \
+ unzip \
+ pkg-config \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-RUN ln -s /usr/bin/php5 /usr/bin/php
+RUN echo "Defaults env_keep=SSH_AUTH_SOCK" >> /etc/sudoers
 
 RUN npm install -g grunt-cli bower \
 && curl -sL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -16,7 +37,7 @@ COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 ADD https://raw.githubusercontent.com/kronostechnologies/build/master/kbuild/kbuild /usr/local/bin/kbuild
 RUN chmod 755 /usr/local/bin/kbuild
 
-RUN echo "Defaults env_keep += \"SSH_AUTH_SOCK\"" > /etc/sudoers.d/pass_ssh
+ENV DEBIAN_FRONTEND=''
 
 WORKDIR /code
 
