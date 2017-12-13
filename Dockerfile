@@ -9,7 +9,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install apt-transport-https 
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 ADD etc/ /etc/
 RUN curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
- && curl -s https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg | apt-key add -
+ && curl -s https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg | apt-key add - \
+ && curl -s https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+
 RUN apt-get update \
  && apt-get install -y \
  build-essential \
@@ -26,11 +28,12 @@ RUN apt-get update \
  unzip \
  pkg-config \
  python \
+ yarn \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 RUN echo "Defaults env_keep=SSH_AUTH_SOCK" >> /etc/sudoers
 
-RUN npm install -g grunt-cli bower yarn
+RUN npm install -g grunt-cli bower
 RUN curl -sL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
