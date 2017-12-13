@@ -10,7 +10,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install apt-transport-https 
 ADD etc/ /etc/
 RUN curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
  && curl -s https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg | apt-key add - \
- && curl -s https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+ && curl -s https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 
 RUN apt-get update \
  && apt-get install -y \
