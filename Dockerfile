@@ -30,7 +30,7 @@ RUN apt-get update \
 
 RUN echo "Defaults env_keep=SSH_AUTH_SOCK" >> /etc/sudoers
 
-RUN npm install -g grunt-cli bower
+RUN npm install -g grunt-cli bower yarn
 RUN curl -sL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
