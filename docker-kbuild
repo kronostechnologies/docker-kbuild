@@ -2,7 +2,7 @@
 
 set -x
 
-VERSION=latest
+VERSION='1.0.0'
 
 if ! docker image inspect "kronostechnologies/kbuild:${VERSION}" &> /dev/null; then
   docker pull "kronostechnologies/kbuild:${VERSION}"
