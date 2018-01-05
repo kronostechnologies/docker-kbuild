@@ -19,7 +19,7 @@ cat << EOF
 
 EOF
 elif [[ "$@" == --* ]]; then
-  sudo -u docker kbuild $@
+  exec sudo -u docker kbuild "$@"
 else
-  sudo -u docker $@
+  exec sudo -u docker "$@"
 fi

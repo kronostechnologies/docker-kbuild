@@ -36,10 +36,7 @@ RUN echo "Defaults env_keep=SSH_AUTH_SOCK" >> /etc/sudoers
 RUN npm install -g grunt-cli bower
 RUN curl -sL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
-
-ADD https://raw.githubusercontent.com/kronostechnologies/build/master/kbuild/kbuild /usr/local/bin/kbuild
-RUN chmod 755 /usr/local/bin/kbuild
+COPY kbuild entrypoint.sh /usr/local/bin/
 
 ENV DEBIAN_FRONTEND=''
 

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -x
+
+VERSION=latest
+
+if ! docker image inspect "kronostechnologies/kbuild:${VERSION}" &> /dev/null; then
+  docker pull "kronostechnologies/kbuild:${VERSION}"
+fi
+
+declare -a FLAGS=( \
+  --interactive \
+  --tty \
+  --rm \
+  -e "USERID=`id -u`" \
+  -e "GROUPID=`id -g`" \
+)
+
+case $(uname) in
+ Linux)
+ get_real_path='readlink -f'
+ ;;
+ Darwin)
+ get_real_path='realpath'
+ ;;
+ *)
+ exit 1
+esac
+
+if [[ -n "$1" ]] && [[ -d "$1" ]]; then
+  CODE_PATH=$($get_real_path "$1")
+  shift
+else
+  CODE_PATH=$(pwd)
+fi
+
+FLAGS+=( -v "${CODE_PATH}":/code )
+
+if [[ -n "${SSH_AUTH_SOCK}" ]]; then
+  FLAGS+=( -v "${SSH_AUTH_SOCK}":/tmp/ssh_agent -e SSH_AUTH_SOCK=/tmp/ssh_agent )
+fi
+
+if [[ -x $(command -v composer) ]]; then
+  COMPOSER_API_KEY=$(composer config github-oauth.github.com 2>/dev/null)
+  if [[ -n "$COMPOSER_API_KEY" ]]; then
+    FLAGS+=( -e "$COMPOSER_API_KEY" )
+  fi
+fi
+
+exec docker run "${FLAGS[@]}" kronostechnologies/kbuild:"${VERSION}" "$@"
