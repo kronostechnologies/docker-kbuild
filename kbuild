@@ -2,18 +2,26 @@
 # Build script
 set -e -u
 
+_npm_global () {
+  if [ -w "$(npm root -g)" ]; then
+    npm install -g "${@}"
+  else
+    sudo npm install -g "${@}"
+  fi
+}
+
 _npm () {
   if [ -f package.json ];
   then
     if [ -f yarn.lock ];
     then
-      if [ ! -x $(command -v yarn) ];
+      if [ ! -x "$(command -v yarn)" ];
       then
-        npm install -g yarn
+        _npm_global yarn
       fi
       yarn install
     else
-      npm install
+      npm ci
     fi
   fi
 }
@@ -21,9 +29,9 @@ _npm () {
 _bower () {
   if [ -f bower.json ];
   then
-    if [ ! -x $(command -v bower) ];
+    if [ ! -x "$(command -v bower)" ];
     then
-      npm install -g bower
+      _npm_global bower
     fi
 
     if [ "$1" == 'dev' ];
@@ -37,9 +45,9 @@ _bower () {
 _grunt () {
   if [ -f Gruntfile.js ];
   then
-    if [ ! -x $(command -v grunt) ];
+    if [ ! -x "$(command -v grunt)" ];
     then
-      npm install -g grunt-cli
+      _npm_global grunt-cli
     fi
 
     if [ "$1" == 'dev' ];
