@@ -2,6 +2,12 @@
 # Build script
 set -e -u
 
+ROOTDIR="$(git rev-parse --show-toplevel 2>/dev/null)"
+if [[ -d "${ROOTDIR}" ]]
+then
+  cd "${ROOTDIR}"
+fi
+
 _npm_global () {
   if [ -w "$(npm root -g)" ]; then
     npm install -g "${@}"
