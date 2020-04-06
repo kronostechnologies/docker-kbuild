@@ -1,6 +1,6 @@
 #!/bin/bash
 # Build script
-set -e -u
+set -u
 
 ROOTDIR="$(git rev-parse --show-toplevel 2>/dev/null)"
 if [[ -d "${ROOTDIR}" ]]
@@ -26,8 +26,22 @@ _npm () {
         _npm_global yarn
       fi
       yarn install
+    if [ "$1" == 'dev' ];
+    then
+      yarn run build:dev
+    elif [ "$1" == 'release' ];
+    then
+      yarn run build
+    fi
     else
       npm ci
+      if [ "$1" == 'dev' ];
+      then
+        npm run build:dev
+      elif [ "$1" == 'release' ];
+      then
+        npm run build
+      fi
     fi
   fi
 }
