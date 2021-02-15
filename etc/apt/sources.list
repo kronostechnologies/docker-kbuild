@@ -1,6 +1,0 @@
-deb https://deb.debian.org/debian/ stretch main contrib non-free
-deb https://deb.debian.org/debian-security stretch/updates main contrib non-free
-deb https://deb.debian.org/debian/ stretch-updates main contrib non-free
-deb https://deb.nodesource.com/node_8.x stretch main
-deb https://packages.sury.org/php/ stretch main
-deb https://dl.yarnpkg.com/debian/ stable main
