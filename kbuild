@@ -118,10 +118,15 @@ _clean () {
 
 if [[ $# != 0 && "$1" == '--dev' ]]
 then
-  _npm dev
-  _bower dev
-  _grunt dev
-  _composer dev
+  if [[ -f "Makefile" ]]; then
+    make setup
+    make compile
+  else
+    _npm dev
+    _bower dev
+    _grunt dev
+    _composer dev
+   fi
 elif [[ $# != 0 && "$1" == '--release' ]]
 then
   _npm release
