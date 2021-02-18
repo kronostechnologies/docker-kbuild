@@ -122,6 +122,9 @@ then
     make setup
     make compile
   else
+    if [[ -f ".tool-versions" ]]; then
+      asdf install
+    fi
     _npm dev
     _bower dev
     _grunt dev
